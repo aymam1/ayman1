@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="آفاق للتسويق الرقمي - خدمات احترافية في التسويق الرقمي، إدارة وسائل التواصل الاجتماعي، تحسين محركات البحث SEO، وتطوير المواقع الإلكترونية">
+    <meta name="keywords" content="تسويق رقمي, سوشيال ميديا, تصميم مواقع, تحسين محركات البحث, إعلانات رقمية, تسويق الكتروني">
+    <title>آفاق للتسويق الرقمي | خدمات التسويق الرقمي المتكاملة</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* ستايل البوت */
+        #chat-widget {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            z-index: 1000;
+        }
+
+        .chat-button {
+            width: 60px;
+            height: 60px;
+            background: var(--primary-color, #1a237e);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: white;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .chat-button:hover {
+            transform: scale(1.1);
+        }
+
+        .chat-popup {
+            width: 350px;
+            height: 500px;
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            display: none;
+            position: fixed;
+            bottom: 80px;
+            left: 20px;
+            z-index: 1000;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .chat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            background: var(--primary-color, #1a237e);
+            color: white;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .chat-messages {
+            height: 380px;
+            padding: 15px;
+            overflow-y: auto;
+        }
+
+        .message {
+            margin-bottom: 15px;
+        }
+
+        .user-bubble {
+            background: #e9ecef;
+            color: #333;
+            padding: 10px 15px;
+            border-radius: 15px;
+            margin-left: 20%;
+            margin-right: 0;
+        }
+
+        .bot-bubble {
+            background: var(--primary-color, #1a237e);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 15px;
+            margin-right: 20%;
+            margin-left: 0;
+        }
+
+        .chat-input {
+            padding: 15px;
+            border-top: 1px solid #dee2e6;
+        }
+
+        .chat-input .input-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        .chat-input input {
+            flex: 1;
+            padding: 8px 12px;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            outline: none;
+        }
+
+        .chat-input button {
+            padding: 8px 15px;
+            background: var(--primary-color, #1a237e);
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <!-- محتوى الموقع الأصلي -->
+    
+    <!-- محادثة مباشرة -->
+    <div id="chat-widget">
+        <div class="chat-button" onclick="toggleChat()">
+            <i class="fas fa-comments fa-lg"></i>
+        </div>
+        <div class="chat-popup" id="chat-popup">
+            <div class="chat-header">
+                <h5 class="m-0">محادثة مباشرة</h5>
+                <button class="close-btn" onclick="toggleChat()">×</button>
+            </div>
+            <div class="chat-messages" id="chat-messages"></div>
+            <div class="chat-input">
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="اكتب رسالتك..." id="chat-input">
+                    <button class="btn btn-primary" onclick="sendMessage()">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- إضافة ملف البوت -->
+    <script src="js/bot.js"></script>
+    <script>
+        // تهيئة المحادثة
+        window.onload = function() {
+            chatBot.addMessage('مرحباً بك في آفاق للتسويق الرقمي! كيف يمكنني مساعدتك؟', false);
+        };
+
+        function toggleChat() {
+            const popup = document.getElementById('chat-popup');
+            popup.style.display = popup.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('chat-input');
+            const message = input.value.trim();
+            
+            if (message) {
+                chatBot.handleUserMessage(message);
+                input.value = '';
+            }
+        }
+
+        // إضافة خاصية الإرسال بالإنتر
+        document.getElementById('chat-input').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+    </script>
+</body>
+</html>

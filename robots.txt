@@ -1,0 +1,19 @@
+User-agent: *
+Allow: /
+Sitemap: https://www.afaqdigital.com/sitemap.xml
+
+# Disallow specific directories
+Disallow: /admin/
+Disallow: /private/
+Disallow: /temp/
+Disallow: /includes/
+
+# Allow specific file types
+Allow: *.html
+Allow: *.css
+Allow: *.js
+Allow: *.jpg
+Allow: *.jpeg
+Allow: *.png
+Allow: *.gif
+Allow: *.svg

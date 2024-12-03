@@ -1,0 +1,237 @@
+/* التنسيقات العامة */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* تنسيق القسم الرئيسي */
+.hero-section {
+    background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://via.placeholder.com/1920x1080');
+    background-size: cover;
+    background-position: center;
+    color: white;
+    padding: 150px 0;
+    margin-bottom: 30px;
+}
+
+.hero-section h1 {
+    font-size: 3.5rem;
+    margin-bottom: 20px;
+}
+
+/* تنسيق بطاقات الخدمات */
+.service-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: none;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.service-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.service-icon {
+    margin: -20px -20px 20px -20px;
+    overflow: hidden;
+    border-radius: 15px 15px 0 0;
+    background: #f8f9fa;
+}
+
+.service-gif {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 15px 15px 0 0;
+    transition: transform 0.3s ease;
+}
+
+.service-card:hover .service-gif {
+    transform: scale(1.05);
+}
+
+.service-card h3 {
+    color: #0d6efd;
+    margin-bottom: 15px;
+    font-size: 1.5rem;
+}
+
+.service-card ul {
+    margin-top: 15px;
+}
+
+.service-card ul li {
+    margin-bottom: 8px;
+    font-size: 0.95rem;
+}
+
+.service-card .fas.fa-check {
+    color: #28a745;
+}
+
+/* تحسينات للشاشات الصغيرة */
+@media (max-width: 768px) {
+    .service-gif {
+        height: 180px;
+    }
+    
+    .service-card h3 {
+        font-size: 1.3rem;
+    }
+}
+
+/* تنسيق نموذج الاتصال */
+#contactForm {
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+}
+
+/* تنسيق روابط التواصل الاجتماعي */
+.social-links a {
+    font-size: 1.5rem;
+    transition: color 0.3s ease;
+}
+
+.social-links a:hover {
+    color: #0d6efd !important;
+}
+
+/* تنسيقات إضافية للتجاوب */
+@media (max-width: 768px) {
+    .hero-section h1 {
+        font-size: 2.5rem;
+    }
+    
+    .hero-section {
+        padding: 100px 0;
+    }
+}
+
+/* تحسينات للأزرار */
+.btn-primary {
+    padding: 10px 25px;
+    border-radius: 25px;
+    font-weight: bold;
+}
+
+/* تنسيق القسم "من نحن" */
+#about img {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* تحسينات للنص */
+h2 {
+    position: relative;
+    padding-bottom: 15px;
+}
+
+h2:after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 3px;
+    background-color: #0d6efd;
+}
+
+/* تنسيق أيقونة واتساب الثابتة */
+.whatsapp-float {
+    position: fixed;
+    width: 60px;
+    height: 60px;
+    bottom: 40px;
+    right: 40px;
+    background-color: #25d366;
+    color: #FFF;
+    border-radius: 50px;
+    text-align: center;
+    font-size: 30px;
+    box-shadow: 2px 2px 3px #999;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.whatsapp-float:hover {
+    background-color: #128C7E;
+    color: #FFF;
+    transform: scale(1.1);
+}
+
+/* تعديل الموقع للشاشات الصغيرة */
+@media screen and (max-width: 767px) {
+    .whatsapp-float {
+        width: 50px;
+        height: 50px;
+        bottom: 20px;
+        right: 20px;
+        font-size: 25px;
+    }
+}
+
+/* تنسيق شريط الصور المتحرك */
+#mainCarousel {
+    margin-bottom: 30px;
+}
+
+.carousel-item {
+    height: 600px;
+    overflow: hidden;
+}
+
+.carousel-item img {
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+    filter: brightness(0.7);
+}
+
+.carousel-caption {
+    bottom: 20%;
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.5);
+    border-radius: 10px;
+}
+
+.carousel-caption h2 {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+    color: #fff;
+}
+
+.carousel-caption p {
+    font-size: 1.2rem;
+    margin-bottom: 25px;
+}
+
+.carousel-indicators {
+    bottom: 30px;
+}
+
+.carousel-control-prev,
+.carousel-control-next {
+    width: 5%;
+}
+
+/* تحسينات للشاشات الصغيرة */
+@media (max-width: 768px) {
+    .carousel-item {
+        height: 400px;
+    }
+    
+    .carousel-caption h2 {
+        font-size: 1.8rem;
+    }
+    
+    .carousel-caption p {
+        font-size: 1rem;
+    }
+}

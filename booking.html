@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>حجز موعد | آفاق للتسويق الرقمي</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #1a237e;
+            --secondary-color: #0d47a1;
+            --text-color: #333;
+            --bg-color: #f8f9fa;
+            --card-bg: #fff;
+        }
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+        }
+
+        .booking-header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 60px 0;
+            margin-bottom: 40px;
+        }
+
+        .booking-header h1 {
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .booking-card {
+            background: var(--card-bg);
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            padding: 30px;
+            margin-bottom: 30px;
+            transition: transform 0.3s ease;
+        }
+
+        .booking-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .service-select {
+            margin-bottom: 30px;
+        }
+
+        .date-select {
+            margin-bottom: 30px;
+        }
+
+        .time-slots {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+
+        .time-slot {
+            padding: 10px;
+            text-align: center;
+            border: 2px solid var(--primary-color);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .time-slot:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .time-slot.selected {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .form-control {
+            padding: 12px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+        }
+
+        .btn-book {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-book:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            color: white;
+        }
+
+        .confirmation-message {
+            display: none;
+            background: #4CAF50;
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .error-message {
+            display: none;
+            background: #f44336;
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        footer {
+            background: var(--primary-color);
+            color: white;
+            padding: 20px 0;
+            margin-top: 50px;
+        }
+
+        /* تحسينات للهواتف المحمولة */
+        @media (max-width: 768px) {
+            .booking-header {
+                padding: 40px 0;
+            }
+
+            .booking-card {
+                padding: 20px;
+            }
+
+            .time-slots {
+                grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- القائمة العلوية -->
+    <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: var(--primary-color);">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">آفاق للتسويق الرقمي</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">الرئيسية</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="booking.html">حجز موعد</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- رأس الصفحة -->
+    <header class="booking-header">
+        <div class="container text-center">
+            <h1>احجز موعدك الآن</h1>
+            <p>اختر الخدمة المناسبة وموعد الاستشارة</p>
+        </div>
+    </header>
+
+    <!-- نموذج الحجز -->
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="booking-card">
+                    <form id="bookingForm">
+                        <!-- اختيار الخدمة -->
+                        <div class="service-select">
+                            <h3 class="mb-4">اختر الخدمة</h3>
+                            <select class="form-control" id="serviceSelect" required>
+                                <option value="">-- اختر الخدمة --</option>
+                                <option value="social-media">إدارة وسائل التواصل الاجتماعي</option>
+                                <option value="seo">تحسين محركات البحث SEO</option>
+                                <option value="web-dev">تطوير المواقع الإلكترونية</option>
+                                <option value="digital-ads">الإعلانات الرقمية</option>
+                            </select>
+                        </div>
+
+                        <!-- اختيار التاريخ -->
+                        <div class="date-select">
+                            <h3 class="mb-4">اختر التاريخ</h3>
+                            <input type="date" class="form-control" id="dateSelect" required>
+                        </div>
+
+                        <!-- اختيار الوقت -->
+                        <div class="time-select">
+                            <h3 class="mb-4">اختر الوقت المناسب</h3>
+                            <div class="time-slots" id="timeSlots">
+                                <div class="time-slot" data-time="09:00">09:00</div>
+                                <div class="time-slot" data-time="10:00">10:00</div>
+                                <div class="time-slot" data-time="11:00">11:00</div>
+                                <div class="time-slot" data-time="12:00">12:00</div>
+                                <div class="time-slot" data-time="13:00">13:00</div>
+                                <div class="time-slot" data-time="14:00">14:00</div>
+                                <div class="time-slot" data-time="15:00">15:00</div>
+                                <div class="time-slot" data-time="16:00">16:00</div>
+                            </div>
+                        </div>
+
+                        <!-- معلومات العميل -->
+                        <div class="client-info">
+                            <h3 class="mb-4">معلومات الاتصال</h3>
+                            <input type="text" class="form-control" placeholder="الاسم الكامل" required>
+                            <input type="email" class="form-control" placeholder="البريد الإلكتروني" required>
+                            <input type="tel" class="form-control" placeholder="رقم الهاتف" required>
+                            <textarea class="form-control" placeholder="ملاحظات إضافية" rows="3"></textarea>
+                        </div>
+
+                        <!-- زر الحجز -->
+                        <button type="submit" class="btn btn-book w-100 mt-4">
+                            <i class="fas fa-calendar-check me-2"></i>
+                            تأكيد الحجز
+                        </button>
+                    </form>
+
+                    <!-- رسالة التأكيد -->
+                    <div class="confirmation-message" id="confirmationMessage">
+                        تم تأكيد حجزك بنجاح! سنتواصل معك قريباً.
+                    </div>
+
+                    <!-- رسالة الخطأ -->
+                    <div class="error-message" id="errorMessage">
+                        عذراً، حدث خطأ في عملية الحجز. يرجى المحاولة مرة أخرى.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- التذييل -->
+    <footer class="text-center">
+        <div class="container">
+            <p class="mb-0">جميع الحقوق محفوظة © 2024 آفاق للتسويق الرقمي</p>
+        </div>
+    </footer>
+
+    <!-- السكربتات -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // تحديد التاريخ الأدنى ليكون اليوم
+            const dateSelect = document.getElementById('dateSelect');
+            const today = new Date().toISOString().split('T')[0];
+            dateSelect.min = today;
+
+            // اختيار الوقت
+            const timeSlots = document.querySelectorAll('.time-slot');
+            timeSlots.forEach(slot => {
+                slot.addEventListener('click', function() {
+                    timeSlots.forEach(s => s.classList.remove('selected'));
+                    this.classList.add('selected');
+                });
+            });
+
+            // معالجة تقديم النموذج
+            const bookingForm = document.getElementById('bookingForm');
+            const confirmationMessage = document.getElementById('confirmationMessage');
+            const errorMessage = document.getElementById('errorMessage');
+
+            bookingForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // هنا يمكنك إضافة التحقق من صحة البيانات
+                const selectedTime = document.querySelector('.time-slot.selected');
+                if (!selectedTime) {
+                    alert('يرجى اختيار وقت للموعد');
+                    return;
+                }
+
+                // إظهار رسالة التأكيد
+                confirmationMessage.style.display = 'block';
+                errorMessage.style.display = 'none';
+                bookingForm.reset();
+                timeSlots.forEach(s => s.classList.remove('selected'));
+
+                // تمرير إلى رسالة التأكيد
+                confirmationMessage.scrollIntoView({ behavior: 'smooth' });
+            });
+        });
+    </script>
+</body>
+</html>
