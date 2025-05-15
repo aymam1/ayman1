@@ -1,0 +1,225 @@
+/* تنسيقات بوت المحاسبة */
+.chat-widget {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    z-index: 1000;
+    width: 350px;
+    height: 500px;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 5px 25px rgba(0,0,0,0.2);
+    overflow: hidden;
+    transform: scale(0);
+    transform-origin: bottom left;
+    transition: transform 0.3s ease;
+}
+
+.chat-widget.active {
+    transform: scale(1);
+}
+
+.chat-header {
+    background: linear-gradient(to right, #1a237e, #0d47a1);
+    color: white;
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.chat-header h3 {
+    margin: 0;
+    font-size: 1.2rem;
+}
+
+.close-chat {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+.chat-messages {
+    height: 380px;
+    padding: 15px;
+    overflow-y: auto;
+}
+
+.chat-message {
+    margin-bottom: 15px;
+    display: flex;
+    flex-direction: column;
+}
+
+.chat-message.user {
+    align-items: flex-end;
+}
+
+.chat-message.bot {
+    align-items: flex-start;
+}
+
+.message-content {
+    padding: 10px 15px;
+    border-radius: 15px;
+    max-width: 80%;
+}
+
+.chat-message.user .message-content {
+    background: #e9f5ff;
+    color: #333;
+}
+
+.chat-message.bot .message-content {
+    background: #f0f0f0;
+    color: #333;
+}
+
+.chat-input {
+    display: flex;
+    padding: 10px;
+    border-top: 1px solid #eee;
+}
+
+#userInput {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    margin-left: 10px;
+}
+
+.send-btn {
+    background: linear-gradient(to right, #1a237e, #0d47a1);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.chat-toggle {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(to right, #1a237e, #0d47a1);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    z-index: 999;
+    transition: transform 0.3s ease;
+}
+
+.chat-toggle:hover {
+    transform: scale(1.1);
+}
+
+.options-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-top: 10px;
+}
+
+.chat-option {
+    background: #e9f5ff;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 15px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+}
+
+.chat-option:hover {
+    background: #d0e8ff;
+    transform: translateY(-2px);
+}
+
+/* تنسيقات مؤشر الكتابة */
+.typing-indicator .message-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 50px;
+}
+
+.typing-indicator .message-content span {
+    height: 8px;
+    width: 8px;
+    margin: 0 2px;
+    background-color: #888;
+    border-radius: 50%;
+    display: inline-block;
+    animation: typing 1.4s infinite ease-in-out both;
+}
+
+.typing-indicator .message-content span:nth-child(1) {
+    animation-delay: 0s;
+}
+
+.typing-indicator .message-content span:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.typing-indicator .message-content span:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+@keyframes typing {
+    0% {
+        transform: scale(0);
+    }
+    50% {
+        transform: scale(1);
+    }
+    100% {
+        transform: scale(0);
+    }
+}
+
+/* تنسيقات الوضع الليلي */
+[data-theme="dark"] .chat-widget {
+    background: #2d2d2d;
+}
+
+[data-theme="dark"] .chat-message.user .message-content {
+    background: #3a3a3a;
+    color: #fff;
+}
+
+[data-theme="dark"] .chat-message.bot .message-content {
+    background: #444;
+    color: #fff;
+}
+
+[data-theme="dark"] #userInput {
+    background: #3a3a3a;
+    color: #fff;
+    border-color: #555;
+}
+
+[data-theme="dark"] .chat-option {
+    background: #3a3a3a;
+    color: #fff;
+}
+
+[data-theme="dark"] .chat-option:hover {
+    background: #444;
+}
+
+[data-theme="dark"] .chat-input {
+    border-top-color: #444;
+}

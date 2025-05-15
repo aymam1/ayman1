@@ -1,11 +1,20 @@
-// التحقق من صحة نموذج الاتصال
+// التحقق من صحة نموذج الاتصال وإرسال البيانات عبر جميع وسائل التواصل
 document.getElementById('contactForm').addEventListener('submit', function(e) {
     e.preventDefault();
-    
+
     // التحقق من الحقول
     const formElements = this.elements;
     let isValid = true;
-    
+
+    // جمع بيانات النموذج
+    const formData = {
+        name: formElements.namedItem('fullName').value,
+        email: formElements.namedItem('email').value,
+        phone: formElements.namedItem('phone').value,
+        service: formElements.namedItem('service').value,
+        message: formElements.namedItem('message').value
+    };
+
     for (let element of formElements) {
         if (element.hasAttribute('required') && !element.value.trim()) {
             isValid = false;
@@ -13,7 +22,7 @@ document.getElementById('contactForm').addEventListener('submit', function(e) {
         } else {
             element.classList.remove('is-invalid');
         }
-        
+
         // التحقق من صحة البريد الإلكتروني
         if (element.type === 'email') {
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -23,13 +32,116 @@ document.getElementById('contactForm').addEventListener('submit', function(e) {
             }
         }
     }
-    
+
     if (isValid) {
-        // هنا يمكن إضافة كود إرسال النموذج إلى الخادم
-        alert('تم إرسال رسالتك بنجاح! سنتواصل معك قريباً.');
+        // إرسال البيانات عبر جميع وسائل التواصل
+        sendToAllChannels(formData);
+
+        // إعادة تعيين النموذج (لن يكون مرئياً بعد الآن)
         this.reset();
     }
 });
+
+// إرسال البيانات عبر جميع وسائل التواصل
+function sendToAllChannels(formData) {
+    // إنشاء الروابط لجميع وسائل التواصل
+    const emailSubject = `استفسار جديد من ${formData.name} - ${formData.service}`;
+    const emailBody = `
+اسم العميل: ${formData.name}
+البريد الإلكتروني: ${formData.email}
+رقم الهاتف: ${formData.phone}
+الخدمة المطلوبة: ${formData.service}
+الرسالة: ${formData.message}
+    `;
+    const emailLink = `mailto:aymanalsalawi@gmail.com?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
+
+    const whatsappMessage = `*استفسار جديد من موقع آفاق للمحاسبة*
+
+الاسم: ${formData.name}
+البريد الإلكتروني: ${formData.email}
+رقم الهاتف: ${formData.phone}
+الخدمة المطلوبة: ${formData.service}
+
+الرسالة:
+${formData.message}`;
+    const whatsappLink = `https://wa.me/00967777991788?text=${encodeURIComponent(whatsappMessage)}`;
+
+    const telegramMessage = `استفسار جديد من موقع آفاق للمحاسبة
+
+الاسم: ${formData.name}
+البريد الإلكتروني: ${formData.email}
+رقم الهاتف: ${formData.phone}
+الخدمة المطلوبة: ${formData.service}
+
+الرسالة:
+${formData.message}`;
+    const telegramLink = `https://t.me/Aymanalse?text=${encodeURIComponent(telegramMessage)}`;
+
+    // 5. حفظ البيانات في التخزين المحلي للمتصفح (للاحتياط)
+    const contactRequests = JSON.parse(localStorage.getItem('contactRequests') || '[]');
+    contactRequests.push({
+        ...formData,
+        date: new Date().toISOString()
+    });
+    localStorage.setItem('contactRequests', JSON.stringify(contactRequests));
+
+    // إنشاء عناصر HTML للروابط
+    const successMessage = document.createElement('div');
+    successMessage.className = 'alert alert-success mt-3';
+    successMessage.innerHTML = `
+        <h4 class="alert-heading">تم استلام رسالتك بنجاح!</h4>
+        <p>شكراً لتواصلك معنا. يرجى اختيار إحدى وسائل التواصل التالية لإرسال بياناتك:</p>
+        <div class="d-flex flex-wrap justify-content-center mt-3">
+            <a href="${emailLink}" class="btn btn-primary m-2" target="_blank">
+                <i class="fas fa-envelope me-2"></i> إرسال عبر البريد الإلكتروني
+            </a>
+            <a href="${whatsappLink}" class="btn btn-success m-2" target="_blank">
+                <i class="fab fa-whatsapp me-2"></i> إرسال عبر واتساب
+            </a>
+            <a href="${telegramLink}" class="btn btn-info m-2" target="_blank">
+                <i class="fab fa-telegram me-2"></i> إرسال عبر تلجرام
+            </a>
+            <a href="tel:+967777991788" class="btn btn-danger m-2">
+                <i class="fas fa-phone me-2"></i> اتصل بنا مباشرة
+            </a>
+        </div>
+        <div class="mt-3">
+            <p>أو يمكنك نسخ الرسالة التالية وإرسالها عبر أي وسيلة تواصل:</p>
+            <textarea class="form-control" rows="8" readonly>${whatsappMessage}</textarea>
+            <button class="btn btn-secondary mt-2" onclick="copyMessage(this)">نسخ الرسالة</button>
+        </div>
+    `;
+
+    // إضافة رسالة النجاح إلى النموذج
+    const contactForm = document.getElementById('contactForm');
+    contactForm.style.display = 'none'; // إخفاء النموذج
+    contactForm.parentNode.insertBefore(successMessage, contactForm.nextSibling);
+
+    // تسجيل البيانات في وحدة التحكم (للتأكيد)
+    console.log('تم استلام البيانات:', formData);
+}
+
+// وظيفة نسخ الرسالة
+function copyMessage(button) {
+    const textarea = button.previousElementSibling;
+    textarea.select();
+    document.execCommand('copy');
+
+    // تغيير نص الزر مؤقتاً
+    const originalText = button.textContent;
+    button.textContent = 'تم النسخ!';
+    button.classList.add('btn-success');
+    button.classList.remove('btn-secondary');
+
+    // إعادة النص الأصلي بعد ثانيتين
+    setTimeout(() => {
+        button.textContent = originalText;
+        button.classList.add('btn-secondary');
+        button.classList.remove('btn-success');
+    }, 2000);
+}
+
+
 
 // تنعيم التمرير عند النقر على روابط القائمة
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -37,7 +149,7 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         e.preventDefault();
         const targetId = this.getAttribute('href');
         const targetElement = document.querySelector(targetId);
-        
+
         if (targetElement) {
             targetElement.scrollIntoView({
                 behavior: 'smooth',
@@ -52,7 +164,7 @@ let lastScrollTop = 0;
 window.addEventListener('scroll', function() {
     const navbar = document.querySelector('.navbar');
     let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-    
+
     if (scrollTop > lastScrollTop) {
         navbar.style.top = '-100px';
     } else {
@@ -64,11 +176,11 @@ window.addEventListener('scroll', function() {
 // إضافة تأثيرات ظهور العناصر عند التمرير
 window.addEventListener('scroll', function() {
     const elements = document.querySelectorAll('.service-card, #about img, #contactForm');
-    
+
     elements.forEach(element => {
         const elementTop = element.getBoundingClientRect().top;
         const windowHeight = window.innerHeight;
-        
+
         if (elementTop < windowHeight - 100) {
             element.style.opacity = '1';
             element.style.transform = 'translateY(0)';
@@ -85,10 +197,10 @@ document.querySelectorAll('.faq-question').forEach(question => {
                 item.classList.remove('active');
             }
         });
-        
+
         // تبديل حالة السؤال الحالي
         question.parentElement.classList.toggle('active');
-        
+
         // تدوير الأيقونة
         const icon = question.querySelector('.faq-icon');
         if (question.parentElement.classList.contains('active')) {
@@ -137,7 +249,7 @@ let isChatOpen = false;
 
 // معلومات الشركة
 const companyInfo = {
-    name: "آفاق للتسويق الرقمي",
+    name: "آفاق للمحاسبة",
     owner: "أيمن الصلوي",
     phone: "00967777991788",
     whatsapp: "00967777991788",
@@ -148,25 +260,25 @@ const companyInfo = {
 
 // قائمة الخدمات
 const services = {
-    social: {
-        title: "إدارة السوشيال ميديا",
+    accounting: {
+        title: "مسك الدفاتر المحاسبية",
         price: "يبدأ من 1500 ريال شهرياً",
-        description: "إدارة احترافية لحسابات التواصل الاجتماعي، تصميم المحتوى، زيادة المتابعين والتفاعل"
+        description: "خدمات مسك الدفاتر المحاسبية بدقة عالية، تسجيل المعاملات المالية، وإعداد القيود المحاسبية"
     },
-    seo: {
-        title: "تحسين محركات البحث",
+    tax: {
+        title: "الخدمات الضريبية",
         price: "يبدأ من 2000 ريال شهرياً",
-        description: "تحسين ظهور موقعك في نتائج البحث، تحليل الكلمات المفتاحية، تحسين المحتوى"
+        description: "إعداد الإقرارات الضريبية، التخطيط الضريبي، والتعامل مع الجهات الضريبية المختلفة"
     },
-    ads: {
-        title: "إدارة الحملات الإعلانية",
-        price: "يبدأ من 1000 ريال شهرياً",
-        description: "إدارة إعلانات جوجل وسناب شات وتويتر وانستقرام بكفاءة عالية"
-    },
-    web: {
-        title: "تصميم المواقع",
+    audit: {
+        title: "خدمات المراجعة والتدقيق",
         price: "يبدأ من 3000 ريال",
-        description: "تصميم مواقع احترافية متجاوبة مع جميع الأجهزة، متوافقة مع محركات البحث"
+        description: "مراجعة وتدقيق الحسابات، إعداد التقارير المالية، وتقييم نظم الرقابة الداخلية"
+    },
+    consulting: {
+        title: "الاستشارات المالية",
+        price: "يبدأ من 1000 ريال للجلسة",
+        description: "تقديم استشارات مالية متخصصة، تحليل الأداء المالي، ووضع الخطط المالية المستقبلية"
     }
 };
 
@@ -174,7 +286,7 @@ function toggleChat() {
     const chatWidget = document.querySelector('.chat-widget');
     const chatToggle = document.querySelector('.chat-toggle');
     isChatOpen = !isChatOpen;
-    
+
     if (isChatOpen) {
         chatWidget.classList.add('active');
         chatToggle.style.transform = 'scale(0)';
@@ -192,11 +304,11 @@ function showOptions() {
         '4️⃣ التواصل معنا',
         '5️⃣ ساعات العمل'
     ];
-    
-    const optionsHtml = options.map(option => 
+
+    const optionsHtml = options.map(option =>
         `<button class="chat-option" onclick="handleOption('${option}')">${option}</button>`
     ).join('');
-    
+
     addMessage(`اختر من القائمة التالية:
         <div class="options-container">${optionsHtml}</div>`, false);
 }
@@ -232,9 +344,9 @@ function handleOption(option) {
     }
 }
 
-function handleKeyPress(event) {
+async function handleKeyPress(event) {
     if (event.key === 'Enter') {
-        sendMessage();
+        await sendMessage();
     }
 }
 
@@ -251,45 +363,128 @@ function addMessage(message, isUser = false) {
     chatMessages.scrollTop = chatMessages.scrollHeight;
 }
 
-function getBotResponse(userMessage) {
-    const lowerMessage = userMessage.toLowerCase();
-    
-    // الكلمات المفتاحية والردود
-    const keywords = {
-        'سعر': `أسعارنا تنافسية وتختلف حسب الخدمة:\n${Object.values(services).map(s => `${s.title}: ${s.price}`).join('\n')}`,
-        'خدمات': `نقدم خدمات متنوعة تشمل:\n${Object.values(services).map(s => `- ${s.title}`).join('\n')}`,
-        'تواصل': `يمكنك التواصل معنا عبر:\nهاتف: ${companyInfo.phone}\nواتساب: ${companyInfo.whatsapp}\nإيميل: ${companyInfo.email}`,
-        'موقع': `موقعنا في ${companyInfo.location}`,
-        'دوام': companyInfo.workHours,
-        'استشارة': 'يسعدنا تقديم استشارة مجانية! يرجى ترك رقم جوالك وسنتواصل معك خلال 24 ساعة.',
-    };
+// استخدام Gemma 3 27B للحصول على ردود أكثر ذكاءً
+async function getBotResponse(userMessage) {
+    const API_KEY = "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";
+    const MODEL = "Gemma 3 27B";
 
-    // البحث عن كلمات مفتاحية في رسالة المستخدم
-    for (let keyword in keywords) {
-        if (lowerMessage.includes(keyword)) {
-            return keywords[keyword];
+    // إعداد سياق المحادثة مع معلومات عن الشركة والخدمات
+    const companyContext = `
+        أنت مساعد محاسبة ذكي لشركة ${companyInfo.name}.
+        معلومات الشركة:
+        - اسم الشركة: ${companyInfo.name}
+        - المالك: ${companyInfo.owner}
+        - الموقع: ${companyInfo.location}
+        - ساعات العمل: ${companyInfo.workHours}
+        - رقم الهاتف: ${companyInfo.phone}
+        - البريد الإلكتروني: ${companyInfo.email}
+
+        الخدمات المقدمة:
+        1. ${services.accounting.title}: ${services.accounting.price}
+           ${services.accounting.description}
+
+        2. ${services.tax.title}: ${services.tax.price}
+           ${services.tax.description}
+
+        3. ${services.audit.title}: ${services.audit.price}
+           ${services.audit.description}
+
+        4. ${services.consulting.title}: ${services.consulting.price}
+           ${services.consulting.description}
+
+        أجب على استفسارات العملاء بشكل مهذب ومفيد. قدم معلومات دقيقة عن الخدمات والأسعار.
+        إذا طلب العميل استشارة، اطلب منه ترك رقم هاتفه للتواصل معه.
+        إذا لم تعرف الإجابة، اقترح التواصل المباشر مع الشركة.
+        أجب باللغة العربية دائماً وبشكل مختصر.
+    `;
+
+    try {
+        // محاولة الاتصال بـ API
+        const response = await fetch("https://api.openai.com/v1/chat/completions", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${API_KEY}`
+            },
+            body: JSON.stringify({
+                model: "gpt-3.5-turbo", // استخدام نموذج متوافق مع واجهة OpenAI
+                messages: [
+                    { role: "system", content: companyContext },
+                    { role: "user", content: userMessage }
+                ],
+                max_tokens: 150,
+                temperature: 0.7
+            })
+        });
+
+        const data = await response.json();
+
+        if (data.choices && data.choices[0] && data.choices[0].message) {
+            return data.choices[0].message.content;
+        } else {
+            throw new Error("لم يتم الحصول على رد من النموذج");
         }
-    }
+    } catch (error) {
+        console.error("خطأ في الاتصال بالنموذج:", error);
 
-    // عرض الخيارات إذا لم يتم العثور على كلمات مفتاحية
-    showOptions();
-    return "لم أفهم سؤالك بشكل واضح. يمكنك اختيار من القائمة أعلاه أو إعادة صياغة سؤالك.";
+        // استخدام الردود الاحتياطية في حالة فشل الاتصال
+        const lowerMessage = userMessage.toLowerCase();
+        const keywords = {
+            'سعر': `أسعارنا تنافسية وتختلف حسب الخدمة:\n${Object.values(services).map(s => `${s.title}: ${s.price}`).join('\n')}`,
+            'خدمات': `نقدم خدمات متنوعة تشمل:\n${Object.values(services).map(s => `- ${s.title}`).join('\n')}`,
+            'تواصل': `يمكنك التواصل معنا عبر:\nهاتف: ${companyInfo.phone}\nواتساب: ${companyInfo.whatsapp}\nإيميل: ${companyInfo.email}`,
+            'موقع': `موقعنا في ${companyInfo.location}`,
+            'دوام': companyInfo.workHours,
+            'استشارة': 'يسعدنا تقديم استشارة مجانية! يرجى ترك رقم جوالك وسنتواصل معك خلال 24 ساعة.',
+        };
+
+        // البحث عن كلمات مفتاحية في رسالة المستخدم
+        for (let keyword in keywords) {
+            if (lowerMessage.includes(keyword)) {
+                return keywords[keyword];
+            }
+        }
+
+        // عرض الخيارات إذا لم يتم العثور على كلمات مفتاحية
+        showOptions();
+        return "عذراً، حدث خطأ في الاتصال. يمكنك اختيار من القائمة أعلاه أو التواصل معنا مباشرة.";
+    }
 }
 
-function sendMessage() {
+async function sendMessage() {
     const userInput = document.getElementById('userInput');
     const message = userInput.value.trim();
-    
+
     if (message) {
         // إضافة رسالة المستخدم
         addMessage(message, true);
-        
-        // إضافة رسالة البوت
-        setTimeout(() => {
-            const botResponse = getBotResponse(message);
+
+        // إظهار مؤشر الكتابة
+        const chatMessages = document.getElementById('chatMessages');
+        const typingIndicator = document.createElement('div');
+        typingIndicator.className = 'chat-message bot typing-indicator';
+        typingIndicator.innerHTML = '<div class="message-content"><span>.</span><span>.</span><span>.</span></div>';
+        chatMessages.appendChild(typingIndicator);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+
+        try {
+            // الحصول على رد البوت
+            const botResponse = await getBotResponse(message);
+
+            // إزالة مؤشر الكتابة
+            chatMessages.removeChild(typingIndicator);
+
+            // إضافة رد البوت
             addMessage(botResponse);
-        }, 500);
-        
+        } catch (error) {
+            // إزالة مؤشر الكتابة
+            chatMessages.removeChild(typingIndicator);
+
+            // إضافة رسالة خطأ
+            addMessage("عذراً، حدث خطأ في الاتصال. يرجى المحاولة مرة أخرى.");
+            console.error(error);
+        }
+
         userInput.value = '';
     }
 }
@@ -303,7 +498,7 @@ document.addEventListener('DOMContentLoaded', () => {
 function toggleTheme() {
     const body = document.body;
     const themeToggle = document.querySelector('.theme-toggle i');
-    
+
     if (body.getAttribute('data-theme') === 'dark') {
         body.removeAttribute('data-theme');
         themeToggle.className = 'fas fa-moon';
@@ -319,7 +514,7 @@ function toggleTheme() {
 document.addEventListener('DOMContentLoaded', () => {
     const savedTheme = localStorage.getItem('theme');
     const themeToggle = document.querySelector('.theme-toggle i');
-    
+
     if (savedTheme === 'dark') {
         document.body.setAttribute('data-theme', 'dark');
         themeToggle.className = 'fas fa-sun';

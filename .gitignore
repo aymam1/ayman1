@@ -1,0 +1,15 @@
+# نظام التشغيل
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# المحرر
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# ملفات مؤقتة
+*.log
+*.tmp
+*.temp

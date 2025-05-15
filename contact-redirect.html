@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إرسال بيانات التواصل - آفاق للمحاسبة</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background-color: #f8f9fa;
+            padding: 20px;
+        }
+        .contact-card {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            padding: 30px;
+            margin-top: 30px;
+        }
+        .contact-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .contact-header img {
+            max-width: 150px;
+            margin-bottom: 20px;
+        }
+        .contact-data {
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+        .contact-data p {
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+        .contact-data strong {
+            color: #0d47a1;
+        }
+        .contact-options {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        .contact-option {
+            flex: 1;
+            min-width: 200px;
+            text-align: center;
+            padding: 20px;
+            border-radius: 10px;
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .contact-option i {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+        .contact-option:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px rgba(0,0,0,0.1);
+        }
+        .email-option {
+            background-color: #0d47a1;
+        }
+        .whatsapp-option {
+            background-color: #25D366;
+        }
+        .telegram-option {
+            background-color: #0088cc;
+        }
+        .phone-option {
+            background-color: #dc3545;
+        }
+        .copy-section {
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+        }
+        .copy-section textarea {
+            width: 100%;
+            height: 200px;
+            padding: 15px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+        .copy-btn {
+            background-color: #6c757d;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .copy-btn:hover {
+            background-color: #5a6268;
+        }
+        .back-btn {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            color: #6c757d;
+            text-decoration: none;
+        }
+        .back-btn:hover {
+            color: #0d47a1;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="contact-card">
+                    <div class="contact-header">
+                        <img src="https://via.placeholder.com/150x150.png?text=آفاق+للمحاسبة" alt="شعار آفاق للمحاسبة">
+                        <h2>شكراً لتواصلك مع آفاق للمحاسبة</h2>
+                        <p>تم استلام بياناتك بنجاح. يرجى اختيار إحدى وسائل التواصل التالية لإرسال استفسارك:</p>
+                    </div>
+                    
+                    <div class="contact-data" id="contactData">
+                        <!-- سيتم ملء هذا القسم بواسطة JavaScript -->
+                    </div>
+                    
+                    <div class="contact-options" id="contactOptions">
+                        <!-- سيتم ملء هذا القسم بواسطة JavaScript -->
+                    </div>
+                    
+                    <div class="copy-section">
+                        <h4>أو يمكنك نسخ الرسالة التالية</h4>
+                        <p>انسخ هذه الرسالة وأرسلها عبر أي وسيلة تواصل تفضلها:</p>
+                        <textarea id="messageText" readonly></textarea>
+                        <button class="copy-btn" onclick="copyMessage()">نسخ الرسالة</button>
+                    </div>
+                    
+                    <a href="index.html" class="back-btn">العودة إلى الصفحة الرئيسية</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // استرجاع البيانات من URL
+        function getQueryParams() {
+            const params = {};
+            const queryString = window.location.search;
+            const urlParams = new URLSearchParams(queryString);
+            
+            for (const [key, value] of urlParams.entries()) {
+                params[key] = decodeURIComponent(value);
+            }
+            
+            return params;
+        }
+        
+        // عرض البيانات
+        function displayContactData() {
+            const params = getQueryParams();
+            const contactData = document.getElementById('contactData');
+            
+            if (Object.keys(params).length === 0) {
+                contactData.innerHTML = '<p>لم يتم العثور على بيانات. يرجى العودة وملء نموذج الاتصال.</p>';
+                return;
+            }
+            
+            contactData.innerHTML = `
+                <p><strong>الاسم:</strong> ${params.fullName || 'غير محدد'}</p>
+                <p><strong>البريد الإلكتروني:</strong> ${params.email || 'غير محدد'}</p>
+                <p><strong>رقم الهاتف:</strong> ${params.phone || 'غير محدد'}</p>
+                <p><strong>الخدمة المطلوبة:</strong> ${params.service || 'غير محدد'}</p>
+                <p><strong>الرسالة:</strong> ${params.message || 'غير محدد'}</p>
+            `;
+            
+            // إنشاء نص الرسالة
+            const messageText = `استفسار جديد من موقع آفاق للمحاسبة
+
+الاسم: ${params.fullName || 'غير محدد'}
+البريد الإلكتروني: ${params.email || 'غير محدد'}
+رقم الهاتف: ${params.phone || 'غير محدد'}
+الخدمة المطلوبة: ${params.service || 'غير محدد'}
+
+الرسالة:
+${params.message || 'غير محدد'}`;
+            
+            document.getElementById('messageText').value = messageText;
+            
+            // إنشاء روابط التواصل
+            const contactOptions = document.getElementById('contactOptions');
+            
+            // رابط البريد الإلكتروني
+            const emailSubject = `استفسار جديد من ${params.fullName} - ${params.service}`;
+            const emailBody = messageText;
+            const emailLink = `mailto:aymanalsalawi@gmail.com?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
+            
+            // رابط واتساب
+            const whatsappLink = `https://wa.me/00967777991788?text=${encodeURIComponent(messageText)}`;
+            
+            // رابط تلجرام
+            const telegramLink = `https://t.me/Aymanalse?text=${encodeURIComponent(messageText)}`;
+            
+            // رابط الهاتف
+            const phoneLink = `tel:+967777991788`;
+            
+            contactOptions.innerHTML = `
+                <a href="${emailLink}" class="contact-option email-option" target="_blank">
+                    <i class="fas fa-envelope"></i>
+                    إرسال عبر البريد الإلكتروني
+                </a>
+                <a href="${whatsappLink}" class="contact-option whatsapp-option" target="_blank">
+                    <i class="fab fa-whatsapp"></i>
+                    إرسال عبر واتساب
+                </a>
+                <a href="${telegramLink}" class="contact-option telegram-option" target="_blank">
+                    <i class="fab fa-telegram"></i>
+                    إرسال عبر تلجرام
+                </a>
+                <a href="${phoneLink}" class="contact-option phone-option">
+                    <i class="fas fa-phone"></i>
+                    اتصل بنا مباشرة
+                </a>
+            `;
+        }
+        
+        // نسخ الرسالة
+        function copyMessage() {
+            const textarea = document.getElementById('messageText');
+            textarea.select();
+            document.execCommand('copy');
+            
+            const copyBtn = document.querySelector('.copy-btn');
+            const originalText = copyBtn.textContent;
+            copyBtn.textContent = 'تم النسخ!';
+            copyBtn.style.backgroundColor = '#28a745';
+            
+            setTimeout(() => {
+                copyBtn.textContent = originalText;
+                copyBtn.style.backgroundColor = '#6c757d';
+            }, 2000);
+        }
+        
+        // تنفيذ الكود عند تحميل الصفحة
+        window.onload = displayContactData;
+    </script>
+</body>
+</html>

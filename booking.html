@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>حجز موعد | آفاق للتسويق الرقمي</title>
+    <title>حجز موعد | آفاق للمحاسبة</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
@@ -150,7 +150,7 @@
     <!-- القائمة العلوية -->
     <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: var(--primary-color);">
         <div class="container">
-            <a class="navbar-brand" href="index.html">آفاق للتسويق الرقمي</a>
+            <a class="navbar-brand" href="index.html">آفاق للمحاسبة</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -180,23 +180,31 @@
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="booking-card">
-                    <form id="bookingForm">
+                    <form id="bookingForm" action="https://formsubmit.co/aymanalsalawi@gmail.com" method="POST">
+                        <!-- إعدادات FormSubmit -->
+                        <input type="hidden" name="_subject" value="حجز موعد جديد - آفاق للمحاسبة">
+                        <input type="hidden" name="_template" value="table">
+                        <input type="hidden" name="_next" value="booking-success.html">
+                        <input type="hidden" name="_captcha" value="false">
+                        <input type="text" name="_honey" style="display:none">
+                        <input type="hidden" name="_autoresponse" value="شكراً لحجز موعد مع آفاق للمحاسبة. لقد استلمنا طلبك وسنقوم بالتواصل معك لتأكيد الموعد.">
+
                         <!-- اختيار الخدمة -->
                         <div class="service-select">
                             <h3 class="mb-4">اختر الخدمة</h3>
-                            <select class="form-control" id="serviceSelect" required>
+                            <select class="form-control" id="serviceSelect" name="الخدمة المطلوبة" required>
                                 <option value="">-- اختر الخدمة --</option>
-                                <option value="social-media">إدارة وسائل التواصل الاجتماعي</option>
-                                <option value="seo">تحسين محركات البحث SEO</option>
-                                <option value="web-dev">تطوير المواقع الإلكترونية</option>
-                                <option value="digital-ads">الإعلانات الرقمية</option>
+                                <option value="مسك الدفاتر المحاسبية">مسك الدفاتر المحاسبية</option>
+                                <option value="الخدمات الضريبية">الخدمات الضريبية</option>
+                                <option value="خدمات المراجعة والتدقيق">خدمات المراجعة والتدقيق</option>
+                                <option value="الاستشارات المالية">الاستشارات المالية</option>
                             </select>
                         </div>
 
                         <!-- اختيار التاريخ -->
                         <div class="date-select">
                             <h3 class="mb-4">اختر التاريخ</h3>
-                            <input type="date" class="form-control" id="dateSelect" required>
+                            <input type="date" class="form-control" id="dateSelect" name="تاريخ الموعد" required>
                         </div>
 
                         <!-- اختيار الوقت -->
@@ -212,15 +220,16 @@
                                 <div class="time-slot" data-time="15:00">15:00</div>
                                 <div class="time-slot" data-time="16:00">16:00</div>
                             </div>
+                            <input type="hidden" id="selectedTime" name="وقت الموعد" required>
                         </div>
 
                         <!-- معلومات العميل -->
                         <div class="client-info">
                             <h3 class="mb-4">معلومات الاتصال</h3>
-                            <input type="text" class="form-control" placeholder="الاسم الكامل" required>
-                            <input type="email" class="form-control" placeholder="البريد الإلكتروني" required>
-                            <input type="tel" class="form-control" placeholder="رقم الهاتف" required>
-                            <textarea class="form-control" placeholder="ملاحظات إضافية" rows="3"></textarea>
+                            <input type="text" class="form-control" name="الاسم" placeholder="الاسم الكامل" required>
+                            <input type="email" class="form-control" name="البريد الإلكتروني" placeholder="البريد الإلكتروني" required>
+                            <input type="tel" class="form-control" name="رقم الهاتف" placeholder="رقم الهاتف" required>
+                            <textarea class="form-control" name="ملاحظات" placeholder="ملاحظات إضافية" rows="3"></textarea>
                         </div>
 
                         <!-- زر الحجز -->
@@ -247,7 +256,7 @@
     <!-- التذييل -->
     <footer class="text-center">
         <div class="container">
-            <p class="mb-0">جميع الحقوق محفوظة © 2024 آفاق للتسويق الرقمي</p>
+            <p class="mb-0">جميع الحقوق محفوظة © 2024 آفاق للمحاسبة</p>
         </div>
     </footer>
 
@@ -262,36 +271,50 @@
 
             // اختيار الوقت
             const timeSlots = document.querySelectorAll('.time-slot');
+            const selectedTimeInput = document.getElementById('selectedTime');
+
             timeSlots.forEach(slot => {
                 slot.addEventListener('click', function() {
                     timeSlots.forEach(s => s.classList.remove('selected'));
                     this.classList.add('selected');
+
+                    // تخزين الوقت المحدد في الحقل المخفي
+                    selectedTimeInput.value = this.getAttribute('data-time');
                 });
             });
 
             // معالجة تقديم النموذج
             const bookingForm = document.getElementById('bookingForm');
-            const confirmationMessage = document.getElementById('confirmationMessage');
-            const errorMessage = document.getElementById('errorMessage');
 
             bookingForm.addEventListener('submit', function(e) {
-                e.preventDefault();
-                
-                // هنا يمكنك إضافة التحقق من صحة البيانات
+                // التحقق من اختيار الوقت قبل الإرسال
                 const selectedTime = document.querySelector('.time-slot.selected');
                 if (!selectedTime) {
+                    e.preventDefault();
                     alert('يرجى اختيار وقت للموعد');
-                    return;
+                    return false;
                 }
 
-                // إظهار رسالة التأكيد
-                confirmationMessage.style.display = 'block';
-                errorMessage.style.display = 'none';
-                bookingForm.reset();
-                timeSlots.forEach(s => s.classList.remove('selected'));
+                // التأكد من تعبئة جميع الحقول المطلوبة
+                const requiredFields = bookingForm.querySelectorAll('[required]');
+                let isValid = true;
 
-                // تمرير إلى رسالة التأكيد
-                confirmationMessage.scrollIntoView({ behavior: 'smooth' });
+                requiredFields.forEach(field => {
+                    if (!field.value.trim()) {
+                        isValid = false;
+                        field.classList.add('is-invalid');
+                    } else {
+                        field.classList.remove('is-invalid');
+                    }
+                });
+
+                if (!isValid) {
+                    e.preventDefault();
+                    alert('يرجى ملء جميع الحقول المطلوبة');
+                    return false;
+                }
+
+                // إذا كانت جميع البيانات صحيحة، يتم إرسال النموذج تلقائياً إلى FormSubmit
             });
         });
     </script>
