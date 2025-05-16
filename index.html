@@ -9,8 +9,8 @@
     <meta name="robots" content="index, follow">
     <meta property="og:title" content="آفاق للمحاسبة | AFAQ Accounting">
     <meta property="og:description" content="شركة رائدة في مجال المحاسبة والخدمات المالية">
-    <meta property="og:image" content="assets/images/logo.png">
-    <meta property="og:url" content="https://afaq-accounting.com">
+    <meta property="og:image" content="https://aymam1.github.io/ayman1/assets/images/logo.png">
+    <meta property="og:url" content="https://aymam1.github.io/ayman1/">
     <title>آفاق للمحاسبة | AFAQ Accounting</title>
 
     <!-- Preload critical assets -->
@@ -1797,28 +1797,18 @@
                 <div class="col-md-6">
                     <div class="contact-form">
                         <h2 class="text-center mb-4">تواصل معنا</h2>
-                        <form id="contactForm" action="https://formsubmit.co/aymanalsalawi@gmail.com" method="POST">
-                            <!-- إعدادات FormSubmit -->
-                            <input type="hidden" name="_subject" value="استفسار جديد من موقع آفاق للمحاسبة">
-                            <input type="hidden" name="_template" value="table">
-                            <input type="hidden" name="_next" value="contact-success.html">
-                            <input type="hidden" name="_captcha" value="false">
-                            <!-- إضافة حقل honeypot لمنع الرسائل العشوائية -->
-                            <input type="text" name="_honey" style="display:none">
-                            <!-- تفعيل إعادة التوجيه التلقائي -->
-                            <input type="hidden" name="_autoresponse" value="شكراً لتواصلك مع آفاق للمحاسبة. لقد استلمنا رسالتك وسنقوم بالرد عليك في أقرب وقت ممكن.">
-
+                        <form id="contactForm" onsubmit="return sendToWhatsApp();">
                             <div class="mb-3">
-                                <input type="text" name="الاسم" id="fullName" class="form-control contact-input" placeholder="الاسم الكامل" required>
+                                <input type="text" id="fullName" class="form-control contact-input" placeholder="الاسم الكامل" required>
                             </div>
                             <div class="mb-3">
-                                <input type="email" name="البريد الإلكتروني" id="email" class="form-control contact-input" placeholder="البريد الإلكتروني" required>
+                                <input type="email" id="email" class="form-control contact-input" placeholder="البريد الإلكتروني" required>
                             </div>
                             <div class="mb-3">
-                                <input type="tel" name="رقم الهاتف" id="phone" class="form-control contact-input" placeholder="رقم الهاتف" required>
+                                <input type="tel" id="phone" class="form-control contact-input" placeholder="رقم الهاتف" required>
                             </div>
                             <div class="mb-3">
-                                <select name="الخدمة المطلوبة" id="service" class="form-control contact-input" required>
+                                <select id="service" class="form-control contact-input" required>
                                     <option value="" selected disabled>اختر الخدمة</option>
                                     <option value="مسك الدفاتر المحاسبية">مسك الدفاتر المحاسبية</option>
                                     <option value="الخدمات الضريبية">الخدمات الضريبية</option>
@@ -1827,10 +1817,45 @@
                                 </select>
                             </div>
                             <div class="mb-3">
-                                <textarea name="الرسالة" id="message" class="form-control contact-input" rows="5" placeholder="رسالتك" required></textarea>
+                                <textarea id="message" class="form-control contact-input" rows="5" placeholder="رسالتك" required></textarea>
                             </div>
-                            <button type="submit" class="contact-btn">إرسال الرسالة</button>
+                            <button type="submit" class="contact-btn whatsapp-btn">
+                                <i class="fab fa-whatsapp me-2"></i> إرسال عبر الواتساب
+                            </button>
                         </form>
+
+                        <script>
+                            function sendToWhatsApp() {
+                                // الحصول على قيم الحقول
+                                const name = document.getElementById('fullName').value;
+                                const email = document.getElementById('email').value;
+                                const phone = document.getElementById('phone').value;
+                                const service = document.getElementById('service').value;
+                                const message = document.getElementById('message').value;
+
+                                // إنشاء نص الرسالة
+                                let whatsappMessage =
+                                    "استفسار جديد من موقع آفاق للمحاسبة" + "%0a" +
+                                    "------------------------" + "%0a" +
+                                    "الاسم: " + name + "%0a" +
+                                    "البريد الإلكتروني: " + email + "%0a" +
+                                    "رقم الهاتف: " + phone + "%0a" +
+                                    "الخدمة المطلوبة: " + service + "%0a" +
+                                    "الرسالة: " + "%0a" + message;
+
+                                // إنشاء رابط واتساب
+                                const whatsappURL = "https://wa.me/+967777991788?text=" + whatsappMessage;
+
+                                // فتح رابط واتساب في نافذة جديدة
+                                window.open(whatsappURL, '_blank');
+
+                                // إظهار رسالة نجاح
+                                alert("تم إرسال بياناتك بنجاح! سيتم فتح واتساب للتواصل المباشر.");
+
+                                // منع إرسال النموذج بالطريقة التقليدية
+                                return false;
+                            }
+                        </script>
                     </div>
                 </div>
                 <div class="col-md-6">
@@ -2201,6 +2226,35 @@
 
             .footer-social-links i {
                 font-size: 1.5rem;
+            }
+
+            /* أنماط زر الواتساب */
+            .whatsapp-btn {
+                background-color: #25d366 !important;
+                border-color: #25d366 !important;
+                color: white !important;
+                font-weight: bold;
+                font-size: 1.1rem;
+                padding: 12px 25px;
+                border-radius: 50px;
+                box-shadow: 0 4px 10px rgba(37, 211, 102, 0.3);
+                transition: all 0.3s ease;
+            }
+
+            .whatsapp-btn:hover {
+                transform: translateY(-3px);
+                box-shadow: 0 6px 15px rgba(37, 211, 102, 0.4);
+                background-color: #22c55e !important;
+            }
+
+            .whatsapp-btn:active {
+                transform: translateY(-1px);
+                box-shadow: 0 3px 8px rgba(37, 211, 102, 0.4);
+            }
+
+            .whatsapp-btn i {
+                font-size: 1.3rem;
+                vertical-align: middle;
             }
         </style>
     </footer>

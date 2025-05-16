@@ -1,6 +1,6 @@
 User-agent: *
 Allow: /
-Sitemap: https://www.afaqdigital.com/sitemap.xml
+Sitemap: https://aymam1.github.io/ayman1/sitemap.xml
 
 # Disallow specific directories
 Disallow: /admin/
